@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 const app = express();
 app.use(cors({ origin: "*" })); // Allow requests from all origins
 app.use(bodyParser.json());
-
+const port = process.env.PORT || 3001;
 app.get("/quizzes", async (req, res) => {
   const quizzes = await prisma.quizzes.findFirst({
     orderBy: {
@@ -64,6 +64,6 @@ app.get("/firstQuiz", async (req, res) => {
   res.json(quiz);
 });
 
-app.listen(3001, () => {
-  console.log("Server is running on port 80");
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
