@@ -15,7 +15,7 @@ datasource db {
 
 
 model Quizzes {
-  id String @id @default(uuid()) 
+  id            Int       @id @default(autoincrement())
   questions Json
   students Students[]
   createdAt DateTime @default(now())
@@ -24,16 +24,17 @@ model Quizzes {
 
 
 model Students {
-  id String @id @default(uuid()) 
-  quizId String
+  id            Int       @id @default(autoincrement())
+  quizId Int
   quiz Quizzes @relation(fields: [quizId], references: [id])
   
   name      String
+  score     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 model Secret {
-  id String @id @default(uuid()) 
+  id            Int       @id @default(autoincrement())
   secret String
   valid Boolean
   createdAt DateTime @default(now())

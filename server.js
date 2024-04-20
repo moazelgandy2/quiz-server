@@ -1,15 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
+const bodyParser = require("body-parser");
 
 const prisma = new PrismaClient();
 const app = express();
 app.use(cors({ origin: "*" })); // Allow requests from all origins
+app.use(bodyParser.json());
 
 app.get("/quizzes", async (req, res) => {
   const quizzes = await prisma.quizzes.findFirst({
     orderBy: {
-      createdAt: "desc",
+      id: "desc",
     },
   });
   res.json(quizzes);
@@ -18,7 +20,7 @@ app.get("/quizzes", async (req, res) => {
 app.get("/lastQuiz", async (req, res) => {
   const quiz = await prisma.quizzes.findFirst({
     orderBy: {
-      createdAt: "desc",
+      id: "desc",
     },
   });
   const quizId = quiz.id;
@@ -41,6 +43,27 @@ app.get("/secret", async (req, res) => {
   res.json(secret);
 });
 
-app.listen(80, () => {
+app.post("/student", async (req, res) => {
+  const { name, quizId, score } = req.body;
+  const student = await prisma.students.create({
+    data: {
+      name,
+      quizId: Number(quizId),
+      score: Number(score),
+    },
+  });
+  res.json(student);
+});
+
+app.get("/firstQuiz", async (req, res) => {
+  const quiz = await prisma.quizzes.findFirst({
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+  res.json(quiz);
+});
+
+app.listen(3001, () => {
   console.log("Server is running on port 80");
 });

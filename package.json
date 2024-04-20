@@ -1,11 +1,15 @@
 {
   "dependencies": {
     "@prisma/client": "^5.12.1",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.19.2"
   },
   "scripts": {
-    "build": "tsc server.ts"
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
