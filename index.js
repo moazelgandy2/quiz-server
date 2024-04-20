@@ -9,12 +9,17 @@ const app = express();
 app.use(cors({ origin: "*" })); // Allow requests from all origins
 app.use(bodyParser.json());
 const port = process.env.PORT || 3001;
+
 app.get("/quizzes", async (req, res) => {
   const quizzes = await prisma.quizzes.findFirst({
     orderBy: {
       id: "desc",
     },
   });
+  if (!quizzes) {
+    res.json({ error: "No quizzes found" });
+    return;
+  }
   res.json(quizzes);
 });
 
@@ -24,7 +29,12 @@ app.get("/lastQuiz", async (req, res) => {
       id: "desc",
     },
   });
+  if (!quiz) {
+    res.json({ error: "No quiz found" });
+    return;
+  }
   const quizId = quiz.id;
+
   res.json(quizId);
 });
 
@@ -53,6 +63,10 @@ app.post("/student", async (req, res) => {
       score: Number(score),
     },
   });
+  if (!student) {
+    res.json({ error: "Student not created" });
+    return;
+  }
   res.json(student);
 });
 
@@ -62,6 +76,10 @@ app.get("/firstQuiz", async (req, res) => {
       createdAt: "asc",
     },
   });
+  if (!quiz) {
+    res.json({ error: "No quiz found" });
+    return;
+  }
   res.json(quiz);
 });
 
