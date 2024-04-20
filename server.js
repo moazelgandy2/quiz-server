@@ -4,6 +4,7 @@ const { PrismaClient } = require("@prisma/client");
 const bodyParser = require("body-parser");
 
 const prisma = new PrismaClient();
+
 const app = express();
 app.use(cors({ origin: "*" })); // Allow requests from all origins
 app.use(bodyParser.json());
