@@ -61,6 +61,20 @@ app.get("/secret", async (req, res) => {
 
 app.post("/student", async (req, res) => {
   const { name, quizId, score } = req.body;
+  const checkQuizId = await prisma.quizzes.findFirst({
+    where: {
+      id: Number(quizId),
+    },
+  });
+  if (!checkQuizId) {
+    const latestQiuzId = await prisma.quizzes.findFirst({
+      orderBy: {
+        id: "desc",
+      },
+    });
+    quizId = latestQiuzId.id;
+  }
+
   const student = await prisma.students.create({
     data: {
       name,
