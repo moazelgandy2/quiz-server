@@ -61,32 +61,40 @@ app.get("/secret", async (req, res) => {
 
 app.post("/student", async (req, res) => {
   const { name, quizId, score } = req.body;
+
+  // Check if the provided quizId exists in the database
   const checkQuizId = await prisma.quizzes.findFirst({
     where: {
       id: Number(quizId),
     },
   });
+
+  // If the provided quizId doesn't exist, set it to the latest quiz ID
+  let correctedQuizId = quizId;
   if (!checkQuizId) {
-    const latestQiuzId = await prisma.quizzes.findFirst({
+    const latestQuiz = await prisma.quizzes.findFirst({
       orderBy: {
         id: "desc",
       },
     });
-    quizId = latestQiuzId.id;
+    correctedQuizId = latestQuiz ? latestQuiz.id : null;
   }
 
-  const student = await prisma.students.create({
-    data: {
-      name,
-      quizId: Number(quizId),
-      score: Number(score),
-    },
-  });
-  if (!student) {
-    res.json({ error: "Student not created" });
-    return;
+  try {
+    // Create the student record with the corrected quizId
+    const student = await prisma.students.create({
+      data: {
+        name,
+        quizId: Number(correctedQuizId),
+        score: Number(score),
+      },
+    });
+
+    res.json(student);
+  } catch (error) {
+    console.error("Error creating student:", error);
+    res.status(500).json({ error: "Failed to create student." });
   }
-  res.json(student);
 });
 
 app.get("/firstQuiz", async (req, res) => {
