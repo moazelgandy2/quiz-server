@@ -17,6 +17,10 @@ datasource db {
 model Quizzes {
   id            Int       @id @default(autoincrement())
   questions Json
+  title String
+  timer Int
+  from Float
+  to Float
   students Students[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
