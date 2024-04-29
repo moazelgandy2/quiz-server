@@ -17,6 +17,9 @@ const port = process.env.PORT || 3001;
 
 app.get("/quizzes", async (req, res) => {
   const quizzes = await prisma.quizzes.findFirst({
+    where: {
+      valid: true,
+    },
     orderBy: {
       id: "desc",
     },
