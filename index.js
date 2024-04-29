@@ -30,6 +30,9 @@ app.get("/quizzes", async (req, res) => {
 
 app.get("/lastQuiz", async (req, res) => {
   const quiz = await prisma.quizzes.findFirst({
+    where: {
+      valid: true,
+    },
     orderBy: {
       id: "desc",
     },
@@ -51,7 +54,7 @@ app.get("/secret", async (req, res) => {
   });
   if (secret == null) {
     const backUp = {
-      secret: "01556271045",
+      secret: "masterkey",
     };
     res.json(backUp);
     return;

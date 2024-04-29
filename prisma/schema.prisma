@@ -21,6 +21,7 @@ model Quizzes {
   timer Int
   from Float
   to Float
+  valid Boolean
   students Students[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
